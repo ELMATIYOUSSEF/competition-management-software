@@ -2,9 +2,7 @@ package com.aftasapi.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -19,6 +17,6 @@ public class Fish {
     private String name;
     private Double averageWeight;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Level level;
 }

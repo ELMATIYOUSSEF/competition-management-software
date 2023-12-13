@@ -22,4 +22,5 @@ public interface MemberService {
 
     void deleteMember(Long memberId) throws ResourceNotFoundException;
     Page<Member> getMembersByname(String name, Pageable pageable);
+    List<Member> getMembersByCompetition(String competitionCode);
 }

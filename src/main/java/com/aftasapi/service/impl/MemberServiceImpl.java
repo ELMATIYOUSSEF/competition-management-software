@@ -72,4 +72,8 @@ public class MemberServiceImpl implements MemberService {
         log.info("Fetching By name Member for page {} of size {}", pageable.getPageNumber(), pageable.getPageSize());
         return memberRepository.findByNameContaining(name, pageable);
     }
+
+    public List<Member> getMembersByCompetition(String competitionCode) {
+        return memberRepository.findMembersByCompetition(competitionCode);
+    }
 }

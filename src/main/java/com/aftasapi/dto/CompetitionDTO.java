@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@TimeRange(startTime = "startTime", endTime = "endTime", message = "End time must be greater than start time")
 public class CompetitionDTO implements Serializable {
     private String code;
     @NotNull
@@ -28,8 +27,7 @@ public class CompetitionDTO implements Serializable {
     @NotNull
     private Time endTime;
 
-    @Min(value = 2, message = "Number of participants cannot be negative and well be 2 as min ")
-    private Integer numberOfParticipant;
+    private Integer numberOfParticipants;
 
     @NotBlank(message = "Location cannot be blank")
     private String location;

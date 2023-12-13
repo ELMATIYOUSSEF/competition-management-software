@@ -17,15 +17,15 @@ public class Ranking {
     @EmbeddedId
     private RankingId id;
 
-    private Integer rank;
+    private Integer ranks;
     private Integer score;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     @MapsId("memberId")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "competition_id")
     @MapsId("competitionCode")
     private Competition competition;

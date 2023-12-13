@@ -28,11 +28,11 @@ public class Member {
     private IdentityDocumentType identityDocumentType;
     private String identityNumber;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Ranking> rankings;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Hunting> huntings;
 }

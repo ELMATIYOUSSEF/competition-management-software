@@ -21,10 +21,10 @@ public class Hunting {
     @ManyToOne
     private Fish fish;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Competition competition;
 
 

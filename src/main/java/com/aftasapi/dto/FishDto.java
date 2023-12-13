@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Value
 public class FishDto implements Serializable {
     @NotBlank(message = "name cannot be empty and it doesn't accepted duplication names")
-    @Column(unique = true)
     @Size(min = 3, max = 30)
     private String name;
     @NotBlank(message = "averageWeight cannot be blank")

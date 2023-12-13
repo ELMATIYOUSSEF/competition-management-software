@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface CompetitionRepository extends JpaRepository<Competition, String> {
     Optional<Competition> findByDate(Date date);
 
+    Page<Competition> findAll(Pageable pageable);
+
     Optional<Competition> findByCode(String code);
 
     Optional<Competition> deleteByCode(String code);

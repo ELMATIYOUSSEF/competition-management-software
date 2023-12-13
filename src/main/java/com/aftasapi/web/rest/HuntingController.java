@@ -1,6 +1,7 @@
 package com.aftasapi.web.rest;
 
 import com.aftasapi.dto.HuntingDto;
+import com.aftasapi.dto.vm.RequestHuntingVM;
 import com.aftasapi.entity.Hunting;
 import com.aftasapi.exception.ResourceNotFoundException;
 import com.aftasapi.handler.response.ResponseMessage;
@@ -9,13 +10,12 @@ import com.aftasapi.service.HuntingService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.event.ListDataEvent;
+
 import java.util.List;
 
 @RestController
@@ -27,9 +27,10 @@ public class HuntingController {
 
 
     @GetMapping
-    public ResponseEntity<?> getAllMember( @ParameterObject Pageable pageable) {
-        List<Hunting> huntings = huntingService.getAllHuntings(pageable);
-            return ResponseMessage.ok("Success", huntings);
+    public List<?> getAllHunting( @ParameterObject Pageable pageable) {
+        return huntingService.getAllHuntings(pageable).stream()
+                .map(hunting -> modelMapper.map(hunting, HuntingDto.class))
+                .toList();
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> getHuntingById(@PathVariable Long id) throws ResourceNotFoundException {
@@ -38,8 +39,8 @@ public class HuntingController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addHunting(@Validated @RequestBody HuntingDto huntingDto) throws Exception {
-        Hunting hunting = huntingService.addHunting(huntingDto);
+    public ResponseEntity<?> addHunting(@Validated @RequestBody RequestHuntingVM requestHuntingVM) throws Exception {
+        Hunting hunting = huntingService.addHunting(requestHuntingVM);
         return ResponseMessage.created("Competition created successfully",modelMapper.map(hunting,HuntingDto.class) );
     }
 
