@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+import static org.springframework.data.domain.PageRequest.of;
 
 @Service
 @Slf4j
@@ -22,7 +22,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member save(Member member) {
-        canMemberBeSaved(member);
+      //  canMemberBeSaved(member);
         log.info("Saved with successfully Member {} ",member);
         return memberRepository.save(member);
     }
@@ -37,8 +37,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> findAll(Pageable pageable) {
-        return memberRepository.findAll(pageable).stream().toList();
+    public Page<Member> findAll(int page , int size) {
+        return memberRepository.findAll(of(page,size));
     }
 
     @Override

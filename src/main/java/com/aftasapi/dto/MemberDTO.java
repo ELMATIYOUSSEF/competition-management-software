@@ -12,6 +12,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class MemberDTO {
     @NotNull(message = "Access date cannot be null")
     @PastOrPresent(message = "Access date must be in the past or present")
     @Temporal(TemporalType.DATE)
-    private Date accessionDate;
+    private LocalDate accessionDate;
     @NotNull(message = "nationality cannot be null")
     private String nationality;
     @NotNull

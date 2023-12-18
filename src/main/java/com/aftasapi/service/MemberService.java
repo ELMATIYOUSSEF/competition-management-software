@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface MemberService {
     Member save(Member member);
 
-    List<Member> findAll(Pageable pageable);
+    Page<Member> findAll(int page , int size);
 
     Member findById(Long memberId) throws Exception;
 

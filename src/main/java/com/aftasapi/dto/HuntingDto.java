@@ -1,6 +1,6 @@
 package com.aftasapi.dto;
 
-import lombok.Value;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -11,6 +11,9 @@ import java.io.Serializable;
  * DTO for {@link com.aftasapi.entity.Hunting}
  */
 @Value
+@Builder
+@Getter
+@Setter
 public class HuntingDto implements Serializable {
     Long id;
     @NotNull

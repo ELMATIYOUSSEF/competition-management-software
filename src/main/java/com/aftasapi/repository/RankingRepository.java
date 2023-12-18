@@ -36,9 +36,8 @@ public interface RankingRepository extends JpaRepository<Ranking, RankingId> {
                      @Param("memberId") Long memberId,
                      @Param("competitionCode") String competitionCode); */
 
-    @Query("SELECT r FROM Ranking r WHERE r.member.id = :memberId AND r.competition.code = :competitionCode")
-    Optional<Ranking> findRankingByMemberAndCompetition(@Param("memberId") Long memberId,
-                                               @Param("competitionCode") String competitionCode);
+    @Query("SELECT r FROM Ranking r WHERE r.competition.code = :competitionCode")
+    List<Ranking> findRankingsByCompetition(@Param("competitionCode") String competitionCode);
 
     @Query("SELECT r FROM Ranking r WHERE r.competition = :competition ORDER BY r.score DESC")
     List<Ranking> getRankingsByCompetitionOrderByScoreDesc(@Param("competition") Competition competition);

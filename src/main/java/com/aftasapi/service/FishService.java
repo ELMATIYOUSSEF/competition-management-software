@@ -14,5 +14,6 @@ public interface FishService  {
     Fish getFishByName(String name) throws ResourceNotFoundException;
     Fish addFish(FishDto fishDto) throws ResourceNotFoundException;
     double pointOfFish(String name);
+    void generateAndSaveFakeData();
 
 }

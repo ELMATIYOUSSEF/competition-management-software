@@ -1,6 +1,8 @@
 package com.aftasapi.entity;
 
 import com.aftasapi.entity.embedded.RankingId;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +10,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,5 +29,6 @@ public class Ranking {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "competition_id")
     @MapsId("competitionCode")
+    @JsonIgnore
     private Competition competition;
 }

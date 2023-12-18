@@ -18,9 +18,8 @@ public class RankingController {
     private final RankingService rankingService ;
     private final ModelMapper modelMapper;
     @GetMapping
-    public ResponseEntity<List<RankingDto>>  CalculateRanking(@RequestParam String code) throws Exception {
-        List<RankingDto> rankingList = rankingService.scoreCompetition(code).stream().map(ranking -> modelMapper.map(ranking, RankingDto.class))
-                .toList();
+    public ResponseEntity<List<Ranking>>  CalculateRanking(@RequestParam String code) throws Exception {
+        List<Ranking> rankingList = rankingService.scoreCompetition(code);
         return ResponseEntity.ok(rankingList);
     }
 

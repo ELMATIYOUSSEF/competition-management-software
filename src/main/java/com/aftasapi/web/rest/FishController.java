@@ -23,15 +23,17 @@ public class FishController {
     private final FishService fishService;
 
     @GetMapping
-    public List<FishDto> getAllFish() {
-   return fishService.getAllFish().stream()
-                .map(fish -> modelMapper.map(fish, FishDto.class))
-                .toList();
+    public List<Fish> getAllFish() {
+       return fishService.getAllFish();
     }
     @PostMapping
     public ResponseEntity<?> createFish( @RequestBody @Validated FishDto fishDto ) throws ResourceNotFoundException {
         Fish save = fishService.addFish(fishDto);
         return ResponseMessage.ok("Fish added with successfully",modelMapper.map(save, FishDto.class));
+    }
+    @PostMapping("fullData")
+    public void initializeData() {
+      fishService.generateAndSaveFakeData();
     }
 
 }

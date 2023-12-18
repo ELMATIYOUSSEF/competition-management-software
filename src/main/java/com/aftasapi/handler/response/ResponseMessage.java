@@ -1,9 +1,12 @@
 package com.aftasapi.handler.response;
 
+import lombok.Builder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@Builder
 public class ResponseMessage {
+
     public int status;
     public String message;
 

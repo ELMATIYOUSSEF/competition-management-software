@@ -1,17 +1,18 @@
 package com.aftasapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,17 +28,15 @@ public class Competition {
     private String code;
     @Column(unique = true)
     private LocalDate date;
-    private Time startTime;
-    private Time endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Integer numberOfParticipants;
     private String location;
     private Double amount;
 
     @OneToMany(mappedBy = "competition" ,cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     private List<Hunting> hunting;
 
     @OneToMany(mappedBy = "competition",cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     private List<Ranking> ranks;
 }

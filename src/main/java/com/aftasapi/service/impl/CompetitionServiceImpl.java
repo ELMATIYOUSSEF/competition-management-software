@@ -35,9 +35,9 @@ public class CompetitionServiceImpl implements com.aftasapi.service.CompetitionS
     private final RankingService rankingService ;
     private final ModelMapper modelMapper;
     @Override
-    public List<Competition> findAll(Pageable pageable) {
-        log.info("Fetching By name Competition for page {} of size {}", pageable.getPageSize(), pageable.getPageSize());
-        return competitionRepository.findAll(pageable).stream().toList();
+    public List<Competition> findAll( ) {
+        log.info("Fetching By name Competition");
+        return competitionRepository.findAll();
     }
     @Override
     public Page<Competition> getCompetitionsByName(String name, Pageable pageable) {

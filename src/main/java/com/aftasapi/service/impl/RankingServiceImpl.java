@@ -33,23 +33,33 @@ public class RankingServiceImpl  implements RankingService {
     }
 
     @Override
-    public Ranking findRankingByMemberAndCompetition(Long member_id , String codeCompetition) throws ResourceNotFoundException {
-        return rankingRepository.findRankingByMemberAndCompetition(member_id, codeCompetition).orElseThrow(()-> new ResourceNotFoundException("Not found this member in this competition"));
+    public List<Ranking> findRankingByMemberAndCompetition(String codeCompetition) throws ResourceNotFoundException {
+        List<Ranking> rankings = rankingRepository.findRankingsByCompetition(codeCompetition);
+        if (rankings.isEmpty()) {
+            throw new ResourceNotFoundException("No Ranking found");
+        }
+        return rankings;
     }
 
-    public void calculateScoreMember(Competition competition , Long member_id) throws Exception {
-        Member member = memberService.findById(member_id);
 
+    public void calculateScoreMember(Competition competition , Member member) throws Exception {
+       // Member member = memberService.findById(member_id);
         List<Hunting> allHunting = huntingService.getAllHuntingByCompetitionCode(competition.getCode());
         List<Hunting> listHunting = allHunting.stream().filter(hunting -> hunting.getMember().equals(member)).toList();
-        double totalFish =0;
+        int totalFish =0;
         for (Hunting hunting:listHunting) {
             double pointOfFish = fishService.pointOfFish(hunting.getFish().getName());
-            totalFish += pointOfFish* hunting.getNumberOfFish();
+            totalFish += (int) (pointOfFish* hunting.getNumberOfFish());
         }
-        rankingRepository.updateScore(totalFish, member_id, competition.getCode());
+        RankingId rankingId =   RankingId.builder()
+                .competitionCode(competition.getCode())
+                .memberId(member.getId())
+                .build();
 
-
+        Optional<Ranking> optional = rankingRepository.findById(rankingId);
+        if (optional.isEmpty()) throw  new Exception(" Ranking not Found !!");
+        optional.get().setScore(totalFish);
+        rankingRepository.save(optional.get());
     }
     public List<Ranking> scoreCompetition(String codeCompetition) throws Exception {
         Competition competition  = competitionRepository.findByCode(codeCompetition).
@@ -57,12 +67,12 @@ public class RankingServiceImpl  implements RankingService {
         List<Member> members = memberService.getMembersByCompetition(codeCompetition);
         if (members.isEmpty()) throw  new Exception(" this competition has no member");
         for (Member member : members) {
-            calculateScoreMember(competition, member.getId());
+            calculateScoreMember(competition, member);
         }
-     return UpdateRankInRanking(competition);
+       return updateRankInRanking(competition);
     }
 
-    public List<Ranking> UpdateRankInRanking(Competition competition){
+    public List<Ranking> updateRankInRanking(Competition competition){
         List<Ranking> rankings = rankingRepository.getRankingsByCompetitionOrderByScoreDesc(competition);
         List<Ranking> rankingList = new ArrayList<>();
         rankings.forEach(ranking -> {

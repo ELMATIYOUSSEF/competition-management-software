@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 @Service
 public interface CompetitionService {
-    List<Competition> findAll(Pageable pageable);
+    List<Competition> findAll();
 
     Competition save(CompetitionDTO competition) throws IllegalArgumentException, ResourceNotFoundException;
 

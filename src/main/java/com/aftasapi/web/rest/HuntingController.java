@@ -41,7 +41,7 @@ public class HuntingController {
     @PostMapping
     public ResponseEntity<?> addHunting(@Validated @RequestBody RequestHuntingVM requestHuntingVM) throws Exception {
         Hunting hunting = huntingService.addHunting(requestHuntingVM);
-        return ResponseMessage.created("Competition created successfully",modelMapper.map(hunting,HuntingDto.class) );
+        return ResponseMessage.created("Competition created successfully",hunting );
     }
 
 

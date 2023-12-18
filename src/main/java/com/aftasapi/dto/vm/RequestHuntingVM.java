@@ -14,10 +14,6 @@ import javax.validation.constraints.*;
 @Builder
 public class RequestHuntingVM {
     Long id;
-    @NotNull
-    @Positive
-    @Min(value = 0, message = "number of fish cannot be negative")
-    Integer numberOfFish;
     @NotNull(message = "Code Competition is mandatory")
     String code_Competition;
     @NotNull(message = "Member is mandatory")

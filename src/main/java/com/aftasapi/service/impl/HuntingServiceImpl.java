@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -44,24 +45,25 @@ public class HuntingServiceImpl implements HuntingService {
     }
     @Override
     public Hunting addHunting(RequestHuntingVM huntingVM) throws Exception {
-
-        Member member = memberService.findById(huntingVM.getId_User());
         Fish fish = fishService.getFishByName(huntingVM.getName_Fish());
-        Competition competition = competitionRepository.findByCode(huntingVM.getCode_Competition()).orElseThrow(()-> new ResourceNotFoundException("not found this competition"));
-
         if(huntingVM.getPoids_Fish() < fish.getAverageWeight()) throw new Exception( " this Fish is less than Average Weight !!");
+        Member member = memberService.findById(huntingVM.getId_User());
+        Competition competition = competitionRepository.findByCode(huntingVM.getCode_Competition()).orElseThrow(()-> new ResourceNotFoundException("not found this competition"));
+        List<Hunting> huntingByCompetitionCode = getAllHuntingByCompetitionCode(competition.getCode());
+        List<Hunting> hunting1 = huntingByCompetitionCode.stream()
+                .filter(hunting -> hunting.getMember().equals(member))
+                .toList();
         Hunting hunting = Hunting.builder()
-                .numberOfFish(huntingVM.getNumberOfFish())
                 .competition(competition)
                 .fish(fish)
                 .member(member)
                 .build();
 
-        Optional<Hunting> existingHunting = huntingRepository.findById(hunting.getId());
-        if(existingHunting.isPresent()){
-            existingHunting.get().setNumberOfFish(huntingVM.getNumberOfFish()+1);
-            return huntingRepository.save(existingHunting.get());
+        if(!hunting1.isEmpty()){
+            hunting1.get(0).setNumberOfFish(hunting1.get(0).getNumberOfFish()+1);
+            return huntingRepository.save(hunting1.get(0));
         }
+        hunting.setNumberOfFish(1);
         log.info("Saved with successfully Hunting {} ",hunting);
         return huntingRepository.save(hunting);
 

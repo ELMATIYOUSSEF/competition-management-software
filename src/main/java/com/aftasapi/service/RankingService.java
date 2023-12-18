@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public interface RankingService {
     void addRanking(Ranking ranking);
-    Ranking findRankingByMemberAndCompetition(Long member_id , String codeCompetition) throws ResourceNotFoundException;
+    List<Ranking> findRankingByMemberAndCompetition(String codeCompetition) throws ResourceNotFoundException;
     List<Ranking> scoreCompetition(String codeCompetition) throws Exception;
     Optional<Ranking> findByRankingID(RankingId ranking);
 }

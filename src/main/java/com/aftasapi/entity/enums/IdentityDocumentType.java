@@ -1,7 +1,7 @@
 package com.aftasapi.entity.enums;
 
 public enum IdentityDocumentType {
-    IDENTITY_CARD,
+    CIN,
     PASSPORT,
     RESIDENCE_CARD,
     OTHER

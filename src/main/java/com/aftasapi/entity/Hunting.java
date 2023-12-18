@@ -1,5 +1,7 @@
 package com.aftasapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -7,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,9 +23,11 @@ public class Hunting {
     private Fish fish;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Member member;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Competition competition;
 
 
