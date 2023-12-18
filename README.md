@@ -1,2 +1,2 @@
 # competition-management-software
-competition management software FrontEnd + backEnd
+competition management software => backEnd
