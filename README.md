@@ -61,13 +61,14 @@ The goal of the project is to modernize the competition management by developing
 ## Development and Contribution
 
 - **Languages Used:** Java, HTML, CSS, JavaScript
-- **Framework Used:** [Framework Name]
-- **Database:** [Type of Database]
-- To contribute, please follow standard development practices and submit your pull requests.
+- **Framework Used:** [SpringBoot , Angular]
+- **Database:** [MySQL]
+
+  ## Swagger Documentation
+**You can access the Swagger documentation after run this project in your Machine at http://localhost:8080/swagger-ui/index.html#.**
 
 **Note:** This README provides an overview of the project. For detailed instructions on deployment and usage, please refer to the documentation provided in the appropriate folder.
-## Swagger Documentation
-**You can access the Swagger documentation after run this project in your Machine at http://localhost:8080/swagger-ui/index.html#.**
+
 
 ## Project Configuration - `pom.xml`
 
