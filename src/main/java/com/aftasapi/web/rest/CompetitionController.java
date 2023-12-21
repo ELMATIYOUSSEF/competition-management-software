@@ -18,6 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -33,8 +36,20 @@ public class CompetitionController {
     @GetMapping
     public List<CompetitionDTO> getAllCompetition() {
         return competitionService.findAll().stream()
-                .map(competition -> modelMapper.map(competition, CompetitionDTO.class))
+                .map(competition -> {
+                    CompetitionDTO competitionDTO = modelMapper.map(competition, CompetitionDTO.class);
+                    competitionDTO.setEndDateValid(checkEndDate(competition));
+                    return competitionDTO;
+                })
                 .toList();
+    }
+    public String checkEndDate(Competition competition) {
+        LocalDateTime competitionStartDateTime = LocalDateTime.of(competition.getDate(), competition.getStartTime());
+        LocalDateTime competitionEndDateTime = LocalDateTime.of(competition.getDate(), competition.getEndTime());
+        if(competitionStartDateTime.isBefore(LocalDateTime.now()) && competitionEndDateTime.isAfter(LocalDateTime.now()) && competition.getDate().isEqual(LocalDate.now())) return "en cours";
+        if(competition.getDate().isBefore(LocalDate.now()))  return "Completed";
+        return "Pending";
+
     }
     @GetMapping("/{code}")
     public ResponseEntity<?> getCompetition(@PathVariable String code) throws ResourceNotFoundException {
@@ -67,8 +82,8 @@ public class CompetitionController {
     }
     @PostMapping("/register")
     public ResponseEntity<?> registerInCompetition(@RequestParam String code , @RequestParam Long id_Member) throws Exception {
-        competitionService.registerMemberInCompetition(id_Member,code);
-        return ResponseEntity.ok().body("Member registered successfully for the competition. ");
+        Competition competition = competitionService.registerMemberInCompetition(id_Member, code);
+        return ResponseMessage.ok("Member registered successfully for the competition. " ,competition) ;
     }
 
     @PostMapping("ranks")

@@ -22,5 +22,5 @@ public interface CompetitionService {
     Competition updateCompetition(CompetitionDTO competition) throws ResourceNotFoundException;
     Competition deleteCompetition(String id) throws Exception;
     Page<Competition> getCompetitionsByName(String name, Pageable pageable);
-    void registerMemberInCompetition(Long memberId, String competitionCode) throws Exception ;
+    Competition registerMemberInCompetition(Long memberId, String competitionCode) throws Exception ;
 }

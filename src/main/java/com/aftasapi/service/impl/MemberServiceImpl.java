@@ -70,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Page<Member> getMembersByname(String name, Pageable pageable) {
         log.info("Fetching By name Member for page {} of size {}", pageable.getPageNumber(), pageable.getPageSize());
-        return memberRepository.findByNameContaining(name, pageable);
+        return memberRepository.searchMembers(name, pageable);
     }
 
     public List<Member> getMembersByCompetition(String competitionCode) {

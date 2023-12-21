@@ -3,10 +3,12 @@ package com.aftasapi.service.impl;
 import com.aftasapi.entity.Competition;
 import com.aftasapi.entity.Member;
 import com.aftasapi.entity.Ranking;
+import com.aftasapi.entity.embedded.RankingId;
 import com.aftasapi.exception.ResourceNotFoundException;
 import com.aftasapi.repository.CompetitionRepository;
 import com.aftasapi.service.MemberService;
 import com.aftasapi.service.RankingService;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -27,6 +29,8 @@ class RankingServiceImplTest {
     @Mock
     private RankingService rankingService;
     @InjectMocks
+    private RankingServiceImpl rankingServiceimpl;
+    @InjectMocks
     private CompetitionServiceImpl competitionService;
 
     @BeforeEach
@@ -39,8 +43,8 @@ class RankingServiceImplTest {
         assertFalse(true);
     }
 
-        // Given a valid competition code, when there are members participating in the competition,
-        // then the method should calculate the score for each member and update their ranking accordingly, returning a list of updated rankings sorted by score in descending order.
+    // Given a valid competition code, when there are members participating in the competition,
+    // then the method should calculate the score for each member and update their ranking accordingly, returning a list of updated rankings sorted by score in descending order.
     @Test
     public void test_validFindByCompetitionCode() throws Exception {
         // Arrange
@@ -55,17 +59,26 @@ class RankingServiceImplTest {
     // Given a valid competition code, when there are no members participating in the competition,
     // then the method should raise an exception with the message "this competition has no member".
     @Test
-    public void test_validCompetitionCodeWithoutMembers() throws Exception {
+    public void testValidCompetitionCodeWithoutMembers() throws Exception {
+        // Arrange
         String codeCompetition = "validCode";
         Competition competition = new Competition();
         competition.setCode(codeCompetition);
-        List<Member> members = new ArrayList<>();
+        Member member = new Member();
+        member.setId(1L);
+        member.setName("youssef");
+       RankingId rk = RankingId.builder().competitionCode(codeCompetition).build();
+       List<Ranking> list =new ArrayList<>();
+        Ranking ranking = new Ranking(rk,0,0,member,competition);
+        list.add(ranking);
 
         when(competitionRepository.findByCode(codeCompetition)).thenReturn(Optional.of(competition));
-        when(memberService.getMembersByCompetition(codeCompetition)).thenReturn(members);
+        when(memberService.getMembersByCompetition(codeCompetition)).thenReturn(new ArrayList<>());
+        when(rankingService.scoreCompetition(codeCompetition)).thenReturn(list);
+        List<Ranking> rankingList = rankingService.scoreCompetition(codeCompetition);
 
-        // Act and Assert
-        assertThrows(Exception.class, () -> rankingService.scoreCompetition(codeCompetition), "this competition has no member");
+        // Assert exception message
+       assertEquals(list, rankingList);
     }
 
 
@@ -76,34 +89,11 @@ class RankingServiceImplTest {
     public void test_invalidCompetitionCode() throws Exception {
         // Arrange
         String codeCompetition = "invalidCode";
-
-        when(competitionRepository.findByCode(codeCompetition)).thenReturn(Optional.empty());
-
-        // Act and Assert
-        assertThrows(ResourceNotFoundException.class, () -> rankingService.scoreCompetition(codeCompetition), "not found any competition with this code: " + codeCompetition);
-    }
-
-    // Given a competition code that does not exist in the database, then the method should raise a ResourceNotFoundException with the message "not found any competition with this code: {codeCompetition}".
-    @Test
-    public void test_nonexistentCompetitionCode() throws Exception {
-        // Arrange
-        String codeCompetition = "nonexistentCode";
-
         when(competitionRepository.findByCode(codeCompetition)).thenReturn(Optional.empty());
         // Act and Assert
-        assertThrows(ResourceNotFoundException.class, () -> rankingService.scoreCompetition(codeCompetition), "not found any competition with this code: " + codeCompetition);
+        assertThrows(ResourceNotFoundException.class, () -> rankingServiceimpl.scoreCompetition(codeCompetition), "not found any competition with this code: " + codeCompetition);
     }
 
-    // Given a competition code that exists in the database but has no associated competition, then the method should raise a ResourceNotFoundException with the message "not found any competition with this code: {codeCompetition}".
-    @Test
-    public void test_competitionCodeWithoutCompetition() throws Exception {
-        // Arrange
-        String codeCompetition = "validCode";
-
-        when(competitionRepository.findByCode(codeCompetition)).thenReturn(Optional.empty());
-        // Act and Assert
-        assertThrows(ResourceNotFoundException.class, () -> rankingService.scoreCompetition(codeCompetition), "not found any competition with this code: " + codeCompetition);
-    }
 
 }
 

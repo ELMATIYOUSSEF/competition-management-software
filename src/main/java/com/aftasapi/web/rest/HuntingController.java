@@ -46,7 +46,7 @@ public class HuntingController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateMember(@RequestBody HuntingDto huntingDto) throws ResourceNotFoundException {
+    public ResponseEntity<?> updateMember(@RequestBody @Validated HuntingDto huntingDto) throws ResourceNotFoundException {
         Hunting competition = huntingService.updateHunting(huntingDto);
         return ResponseMessage.created("Competition updated successfully", competition);
     }

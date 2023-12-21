@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,9 @@ public class CompetitionServiceImpl implements com.aftasapi.service.CompetitionS
     public Competition save(CompetitionDTO competitionDTO) throws IllegalArgumentException, ResourceNotFoundException {
         competitionDTO.setCode(generateCompetitionCode(competitionDTO.getLocation()));
         competitionDTO.setNumberOfParticipants(0);
+        competitionDTO.setDate(competitionDTO.getDate().plusDays(2));
+        LocalTime startTime = LocalTime.of(18,00,00);
+        competitionDTO.setStartTime(startTime);
         Competition competitionMapped = modelMapper.map(competitionDTO, Competition.class);
         canCompetitionBeSaved(competitionMapped);
         log.info("Saved with successfully Competition {} ",competitionMapped);
@@ -87,7 +91,7 @@ public class CompetitionServiceImpl implements com.aftasapi.service.CompetitionS
        return competitionRepository.deleteByCode(code).orElseThrow( () -> new Exception("Error try to deleted again !! ") );
     }
 
-    public void registerMemberInCompetition(Long memberId, String competitionCode) throws Exception {
+    public Competition registerMemberInCompetition(Long memberId, String competitionCode) throws Exception {
         Competition competition = competitionRepository.findByCode(competitionCode).orElseThrow(()-> new ResourceNotFoundException("Not found competition whit this code :" +competitionCode));
         Member member = memberService.findById(memberId);
     /*
@@ -121,6 +125,7 @@ public class CompetitionServiceImpl implements com.aftasapi.service.CompetitionS
                 .build();
         rankingService.addRanking(ranking);
         log.info("{}  is regretted in {}   with successfully " , member ,competition);
+        return competition;
     }
 
     private void canCompetitionBeSaved(Competition competition) throws IllegalArgumentException, ResourceNotFoundException {

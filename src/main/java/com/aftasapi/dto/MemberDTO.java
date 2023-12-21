@@ -22,13 +22,12 @@ import java.util.List;
 @AllArgsConstructor
 public class MemberDTO {
     private Long id;
-    @NotNull(message = "Name is mandatory")
+
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     private String name;
-    @NotNull(message = "Family name cannot be null")
+
     @Size(min = 2, max = 50, message = "Family name must be between 2 and 50 characters")
     private String familyName;
-    @NotNull(message = "Access date cannot be null")
     @PastOrPresent(message = "Access date must be in the past or present")
     @Temporal(TemporalType.DATE)
     private LocalDate accessionDate;
@@ -36,7 +35,6 @@ public class MemberDTO {
     private String nationality;
     @NotNull
     private IdentityDocumentType identityDocumentType;
-    @NotNull(message = "Identity number cannot be null")
     @Size(min = 2, max = 50, message = "Identity number must be between 2 and 50 characters")
     @Column(unique = true)
     private String identityNumber;

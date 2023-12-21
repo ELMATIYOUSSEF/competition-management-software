@@ -21,7 +21,6 @@ public class TimeRangeValidator implements ConstraintValidator<TimeRange, Object
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         try {
             Class<?> clazz = value.getClass();
-
             Field startTimeField = clazz.getDeclaredField(startTimeFieldName);
             Field endTimeField = clazz.getDeclaredField(endTimeFieldName);
 

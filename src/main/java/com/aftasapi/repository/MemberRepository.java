@@ -16,6 +16,15 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByIdentityNumber(String identityNumber);
     Page<Member> findByNameContaining(String name, Pageable pageable);
 
+    @Query("SELECT m FROM Member m " +
+            "WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+            "OR LOWER(m.familyName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+            "OR LOWER(m.identityNumber) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+    Page<Member> searchMembers(
+            @Param("searchTerm") String searchTerm,
+            Pageable pageable
+    );
+
     @Query("SELECT m FROM Member m JOIN m.rankings r WHERE r.competition.code = :competitionCode")
     List<Member> findMembersByCompetition(@Param("competitionCode") String competitionCode);
 }

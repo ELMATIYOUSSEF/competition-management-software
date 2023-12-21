@@ -6,7 +6,6 @@ import com.aftasapi.entity.*;
 import com.aftasapi.exception.ResourceNotFoundException;
 import com.aftasapi.repository.CompetitionRepository;
 import com.aftasapi.repository.HuntingRepository;
-import com.aftasapi.repository.MemberRepository;
 import com.aftasapi.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -49,6 +48,7 @@ public class HuntingServiceImpl implements HuntingService {
         if(huntingVM.getPoids_Fish() < fish.getAverageWeight()) throw new Exception( " this Fish is less than Average Weight !!");
         Member member = memberService.findById(huntingVM.getId_User());
         Competition competition = competitionRepository.findByCode(huntingVM.getCode_Competition()).orElseThrow(()-> new ResourceNotFoundException("not found this competition"));
+        checkDateStart(competition);
         List<Hunting> huntingByCompetitionCode = getAllHuntingByCompetitionCode(competition.getCode());
         List<Hunting> hunting1 = huntingByCompetitionCode.stream()
                 .filter(hunting -> hunting.getMember().equals(member))
@@ -89,5 +89,15 @@ public class HuntingServiceImpl implements HuntingService {
     public List<Hunting> getAllHuntingByCompetitionCode(String competitionCode) {
         return huntingRepository.findHuntingByCompetitionCode(competitionCode);
     }
+    public  void checkDateStart(Competition competition) throws Exception {
+        LocalDate currentDate = LocalDate.now();
+        LocalTime start = competition.getStartTime();
+        LocalDateTime competitionStartDateTime = LocalDateTime.of(currentDate, start);
+        if (competitionStartDateTime.isAfter(LocalDateTime.now())) {
+            throw new Exception("this competition doesn't Start");
+        }
+        if(currentDate.isAfter(competition.getDate())) throw new Exception("Time for Save Hunting's is Expired");
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.aftasapi.dto;
 
 import com.aftasapi.annotations.FutureDays;
+import com.aftasapi.annotations.TimeRange;
 import com.aftasapi.entity.Hunting;
 import com.aftasapi.entity.Ranking;
 import com.sun.istack.NotNull;
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@TimeRange
 public class CompetitionDTO implements Serializable {
     private String code;
     @FutureDays
@@ -34,4 +36,5 @@ public class CompetitionDTO implements Serializable {
     private int amount;
     private List<Hunting> hunting;
     private List<Ranking> ranks;
+    private String EndDateValid ;
 }
