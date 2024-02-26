@@ -15,9 +15,10 @@ spring:
 
   # Database Configuration
   datasource:
-    url: jdbc:mysql://localhost:3307/aftas?createDatabaseIfNotExist=true
+    #url: jdbc:mysql://localhost:3306/aftas?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/aftas?createDatabaseIfNotExist=true
     username: root
-    password:
+    password: root
   jpa:
     open-in-view: true
     show-sql: true
@@ -35,3 +36,15 @@ logging:
     name: aftas-api.log
   level:
     root: info
+
+jwt:
+  token:
+    signing:
+      key: UG2YeG3GJrY3GJtGt3KJyyH4OP3JKyH3KG4UKHG3jhkhfBK3BUolk3KjJB3=
+    validity:
+      access:
+        in:
+          minutes: 1
+      refresh:
+        in:
+          month: 1

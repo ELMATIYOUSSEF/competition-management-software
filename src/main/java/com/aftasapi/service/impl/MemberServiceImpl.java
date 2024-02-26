@@ -23,6 +23,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member save(Member member) {
       //  canMemberBeSaved(member);
+        member.setStatus(false);
         log.info("Saved with successfully Member {} ",member);
         return memberRepository.save(member);
     }

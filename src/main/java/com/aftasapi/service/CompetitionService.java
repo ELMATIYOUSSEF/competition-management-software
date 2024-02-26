@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ public interface CompetitionService {
 
     Competition save(CompetitionDTO competition) throws IllegalArgumentException, ResourceNotFoundException;
 
-   Competition findByDate(Date date);
+   Competition findByDate(LocalDate date);
 
    Competition findByCode(String code) throws ResourceNotFoundException;
     Competition updateCompetition(CompetitionDTO competition) throws ResourceNotFoundException;

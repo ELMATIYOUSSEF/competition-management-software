@@ -13,8 +13,9 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByEmail(String username);
     Optional<Member> findByIdentityNumber(String identityNumber);
-    Page<Member> findByNameContaining(String name, Pageable pageable);
+  //  Page<Member> findByNameContaining(String name, Pageable pageable);
 
     @Query("SELECT m FROM Member m " +
             "WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +

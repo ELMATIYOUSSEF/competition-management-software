@@ -61,7 +61,7 @@ public class CompetitionServiceImpl implements com.aftasapi.service.CompetitionS
 
 
     @Override
-    public Competition findByDate(Date date) {
+    public Competition findByDate(LocalDate date) {
         log.info("Find by date Competition {} ",date);
         return competitionRepository.findByDate(date).orElseThrow();
     }

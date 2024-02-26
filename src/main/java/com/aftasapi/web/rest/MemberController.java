@@ -8,6 +8,7 @@ import com.aftasapi.entity.Competition;
 import com.aftasapi.entity.Member;
 import com.aftasapi.exception.ResourceNotFoundException;
 import com.aftasapi.handler.response.ResponseMessage;
+import com.aftasapi.security.auth.AuthenticationService;
 import com.aftasapi.service.MemberService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,9 +18,11 @@ import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +37,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final ModelMapper modelMapper;
+    private final AuthenticationService authenticationService ;
 
     @PostMapping
     @Operation(summary = "Create a new member")
@@ -87,5 +91,12 @@ public class MemberController {
                                           @RequestParam Optional<Integer> size) {
         Page<Member> members = memberService.getMembersByname(name,of(page.orElse(0),size.orElse(10)));
         return ResponseMessage.ok("Success",members);
+    }
+    @PostMapping("/active")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @RolesAllowed(value={"ROLE_ADMIN"})
+    public ResponseEntity<MemberDTO> ChangeStatus( @RequestParam Long idMember  ) throws ResourceNotFoundException {
+        Member result = authenticationService.activeAccount(idMember);
+        return ResponseEntity.ok((modelMapper.map(result, MemberDTO.class)));
     }
 }
